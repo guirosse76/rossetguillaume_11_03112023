@@ -1,11 +1,12 @@
 import "./Header.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-// import { getToken } from "../../features/Token/token";
-// import { getLoginFetch } from "../../services/API";
-// import { getFirstName } from "../../features/User/firstName";
+import { setToken } from "../../redux/features/user";
+import { getLoginFetch } from "../../services/API";
+import { getFirstName } from "../../redux/features/user";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/img/argentBankLogo.png";
+import firstName from "../../redux/features/User/firstName";
 
 function Header() {
   // Use Selector
@@ -13,18 +14,18 @@ function Header() {
   const token = useSelector((state) => state.user.token);
 
   // Use Effect
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   // if (token === localStorage.getItem("token")) {
-  //   //   dispatch(getToken(localStorage.getItem("token")));
-  //   //   //   const user = getLoginFetch(token);
-  //   //   //   user.then((obj) => {
-  //   //   //     dispatch(getFirstName(obj.firstName));
-  //   //   //   });
-  //   // }
-  //   if (token) {
-  //   }
-  // });
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (token === localStorage.getItem("token")) {
+      dispatch(setToken(localStorage.getItem("token")));
+      const user = getLoginFetch(token);
+      user.then((obj) => {
+        dispatch(getFirstName(obj.firstName));
+      });
+    }
+    if (token) {
+    }
+  });
 
   return (
     <nav className="main-nav">
@@ -38,23 +39,25 @@ function Header() {
       </NavLink>
       <div>
         {/* Anonyme */}
-        {/* Connecté */}
-        {token ? (
-          <>
-            <NavLink to="/profil" className="main-nav-item">
-              <i className="fa fa-user-circle"></i>
-              {userName}
-            </NavLink>
-            <NavLink to="/logout" className="main-nav-item">
-              <i className="fa fa-sign-out"></i>
-              Sign Out
-            </NavLink>
-          </>
-        ) : (
+        {token === 0 && (
           <>
             <NavLink to="/login" className="main-nav-item">
               <i className="fa fa-user-circle"></i>
               Sign In
+            </NavLink>
+          </>
+        )}
+
+        {/* Connecté */}
+        {token !== 0 && (
+          <>
+            <NavLink to="/profil" className="main-nav-item">
+              <i className="fa fa-user-circle"></i>
+              {firstName}
+            </NavLink>
+            <NavLink to="/logout" className="main-nav-item">
+              <i className="fa fa-sign-out"></i>
+              Sign Out
             </NavLink>
           </>
         )}
