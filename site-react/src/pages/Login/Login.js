@@ -15,14 +15,23 @@ function Login() {
   let [remember, setRemember] = useState(false);
 
   // Use Selector
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
+
+  // Add the token
+  const ajoutToken = (token) => {
+    if (remember === true) {
+      localStorage.setItem("token", token);
+    }
+    dispatch(setToken(token));
+  };
 
   // Use Effect
   useEffect(() => {
     if (token === localStorage.getItem("token")) {
       ajoutToken(localStorage.getItem("token"));
     }
-  });
+  }, [token, ajoutToken]);
 
   // Handle Submit
   const handleSubmit = (event) => {
@@ -43,20 +52,11 @@ function Login() {
     setRemember(event.target.checked);
   };
 
-  // Add the token
-  const dispatch = useDispatch();
-  const ajoutToken = (token) => {
-    if (remember === true) {
-      localStorage.setItem("token", token);
-    }
-    dispatch(setToken(token));
-  };
-
   // Redirection
   if (
-    token !== 0 ||
+    token ||
     loginStatus === 200 ||
-    token === localStorage.getItem("token")
+    (token && token === localStorage.getItem("token"))
   )
     return <Navigate to="/profil" />;
 

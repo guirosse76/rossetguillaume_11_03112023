@@ -1,8 +1,13 @@
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { setToken } from "../../redux/features/user";
-import { getFirstName } from "../../redux/features/User/firstName";
-import { getLastName } from "../../redux/features/User/lastName";
+
+import {
+  setFirstName,
+  setLastName,
+  setUserName,
+  setToken,
+} from "../../redux/features/user";
+
 import { Navigate } from "react-router-dom";
 
 function Logout() {
@@ -10,9 +15,10 @@ function Logout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setToken(0));
-    dispatch(getFirstName(""));
-    dispatch(getLastName(""));
+    dispatch(setToken(null));
+    dispatch(setUserName(null));
+    dispatch(setFirstName(null));
+    dispatch(setLastName(null));
 
     localStorage.removeItem("token");
   });

@@ -2,8 +2,11 @@ import "./Profil.css";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getLoginFetch, saveUserProfil } from "../../services/API";
-import { getFirstName } from "../../redux/features/user.js";
-import { getLastName } from "../../redux/features/user.js";
+import {
+  setFirstName,
+  setUserName,
+  setLastName,
+} from "../../redux/features/user.js";
 import { Navigate } from "react-router-dom";
 import Account from "../../components/Account/Account";
 
@@ -21,12 +24,16 @@ function Profil() {
   const token = useSelector((state) => state.user.token);
 
   useEffect(() => {
+    // if (token) {
     const user = getLoginFetch(token);
     user.then((obj) => {
-      dispatch(getFirstName(obj.firstName));
-      dispatch(getLastName(obj.lastName));
+      console.log(obj);
+      dispatch(setUserName(obj.userName));
+      dispatch(setFirstName(obj.firstName));
+      dispatch(setLastName(obj.lastName));
     });
-  }, []);
+    // }
+  }, [token, dispatch]);
 
   // Edit name
   const handleEdit = () => {
@@ -40,8 +47,8 @@ function Profil() {
     document.getElementById("fullName").style.display = "block";
     document.getElementById("edit-button").style.display = "initial";
     document.getElementById("edit-section").style.display = "none";
-    dispatch(getFirstName(newFirstName));
-    dispatch(getLastName(newLastName));
+    dispatch(setFirstName(newFirstName));
+    dispatch(setLastName(newLastName));
     const fullName = { firstName: newFirstName, lastName: newLastName };
     saveUserProfil(token, fullName);
   };
@@ -54,7 +61,7 @@ function Profil() {
   };
 
   // Redirection
-  if (token === 0) return <Navigate to="/login" />;
+  if (!token) return <Navigate to="/login" />;
 
   return (
     <main className="bg-dark">
