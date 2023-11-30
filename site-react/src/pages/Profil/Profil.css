@@ -40,14 +40,23 @@
 
 /* Input */ 
 .profil-input-wrapper {
-    display: inline-flex;
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     margin-bottom: 1rem;
-    text-align: left;
+    text-align: center;
 }
   
 .profil-input-wrapper input {
     font-size: 1.2rem;
-    margin: 10px 5px;
+    /* margin: 10px 5px; */
+    width:20%;
     padding: 5px;
+}
+
+.profil-input-wrapper span {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
 }

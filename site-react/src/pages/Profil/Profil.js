@@ -14,12 +14,14 @@ function Profil() {
   // Use State
   let [newFirstName, setNewFirstName] = useState("");
   let [newLastName, setNewLastName] = useState("");
+  let [newUserName, setNewUserName] = useState("");
 
   // Use Selector / Use Effect
   const dispatch = useDispatch();
 
   const firstName = useSelector((state) => state.user.firstName);
   const lastName = useSelector((state) => state.user.lastName);
+  const userName = useSelector((state) => state.user.userName);
 
   const token = useSelector((state) => state.user.token);
 
@@ -49,7 +51,11 @@ function Profil() {
     document.getElementById("edit-section").style.display = "none";
     dispatch(setFirstName(newFirstName));
     dispatch(setLastName(newLastName));
-    const fullName = { firstName: newFirstName, lastName: newLastName };
+    const fullName = {
+      firstName: newFirstName,
+      lastName: newLastName,
+      userName: newUserName,
+    };
     saveUserProfil(token, fullName);
   };
 
@@ -79,19 +85,30 @@ function Profil() {
         <div id="edit-section">
           <form name="edit">
             <div className="profil-input-wrapper">
+              <span>User name :</span>
               <input
                 type="text"
-                placeholder={firstName}
-                onChange={(e) => setNewFirstName(e.target.value)}
+                placeholder={userName}
+                onChange={(e) => setNewUserName(e.target.value)}
                 required
               />
             </div>
             <div className="profil-input-wrapper">
+              <span>First Name :</span>
+              <input
+                type="text"
+                placeholder={firstName}
+                onChange={(e) => setNewFirstName(e.target.value)}
+                disabled
+              />
+            </div>
+            <div className="profil-input-wrapper">
+              <span>Last Name :</span>
               <input
                 type="text"
                 placeholder={lastName}
                 onChange={(e) => setNewLastName(e.target.value)}
-                required
+                disabled
               />
             </div>
           </form>
