@@ -15,6 +15,7 @@ function Profil() {
   let [newFirstName, setNewFirstName] = useState("");
   let [newLastName, setNewLastName] = useState("");
   let [newUserName, setNewUserName] = useState("");
+  let [openForm, setOpenForm] = useState(false);
 
   // Use Selector / Use Effect
   const dispatch = useDispatch();
@@ -39,21 +40,24 @@ function Profil() {
 
   // Edit name
   const handleEdit = () => {
-    document.getElementById("fullName").style.display = "none";
-    document.getElementById("edit-button").style.display = "none";
-    document.getElementById("edit-section").style.display = "block";
+    setOpenForm(true);
+    //   document.getElementById("fullName").style.display = "none";
+    //   document.getElementById("edit-button").style.display = "none";
+    //   document.getElementById("edit-section").style.display = "block";
   };
 
   // Save Edit
   const handleEditSave = () => {
-    document.getElementById("fullName").style.display = "block";
-    document.getElementById("edit-button").style.display = "initial";
-    document.getElementById("edit-section").style.display = "none";
-    dispatch(setFirstName(newFirstName));
-    dispatch(setLastName(newLastName));
+    setOpenForm(false);
+    // document.getElementById("fullName").style.display = "block";
+    // document.getElementById("edit-button").style.display = "initial";
+    // document.getElementById("edit-section").style.display = "none";
+    // dispatch(setFirstName(newFirstName));
+    // dispatch(setLastName(newLastName));
+    dispatch(setUserName(newUserName));
     const fullName = {
-      firstName: newFirstName,
-      lastName: newLastName,
+      // firstName: newFirstName,
+      // lastName: newLastName,
       userName: newUserName,
     };
     saveUserProfil(token, fullName);
@@ -61,9 +65,10 @@ function Profil() {
 
   // Cancel Edit
   const handleEditCancel = () => {
-    document.getElementById("fullName").style.display = "block";
-    document.getElementById("edit-button").style.display = "initial";
-    document.getElementById("edit-section").style.display = "none";
+    setOpenForm(false);
+    //   document.getElementById("fullName").style.display = "block";
+    //   document.getElementById("edit-button").style.display = "initial";
+    //   document.getElementById("edit-section").style.display = "none";
   };
 
   // Redirection
@@ -75,60 +80,66 @@ function Profil() {
         <h1 id="welcome-name">
           Welcome back
           <br />
-          <span id="fullName">
-            {firstName} {lastName}
-          </span>
+          {!openForm && (
+            <span id="fullName">
+              {firstName} {lastName}
+            </span>
+          )}
         </h1>
-        <button id="edit-button" type="button" onClick={handleEdit}>
-          Edit Name
-        </button>
-        <div id="edit-section">
-          <form name="edit">
-            <div className="profil-input-wrapper">
-              <span>User name :</span>
-              <input
-                type="text"
-                placeholder={userName}
-                onChange={(e) => setNewUserName(e.target.value)}
-                required
-              />
+        {!openForm && (
+          <button id="edit-button" type="button" onClick={handleEdit}>
+            Edit Name
+          </button>
+        )}
+        {openForm && (
+          <div id="edit-section">
+            <form name="edit">
+              <div className="profil-input-wrapper">
+                <span>User name :</span>
+                <input
+                  type="text"
+                  placeholder={userName}
+                  onChange={(e) => setNewUserName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="profil-input-wrapper">
+                <span>First Name :</span>
+                <input
+                  type="text"
+                  placeholder={firstName}
+                  // onChange={(e) => setNewFirstName(e.target.value)}
+                  disabled
+                />
+              </div>
+              <div className="profil-input-wrapper">
+                <span>Last Name :</span>
+                <input
+                  type="text"
+                  placeholder={lastName}
+                  // onChange={(e) => setNewLastName(e.target.value)}
+                  disabled
+                />
+              </div>
+            </form>
+            <div className="btn-form">
+              <button
+                type="submit"
+                className="save-button"
+                onClick={handleEditSave}
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                className="cancel-button"
+                onClick={handleEditCancel}
+              >
+                Cancel
+              </button>
             </div>
-            <div className="profil-input-wrapper">
-              <span>First Name :</span>
-              <input
-                type="text"
-                placeholder={firstName}
-                onChange={(e) => setNewFirstName(e.target.value)}
-                disabled
-              />
-            </div>
-            <div className="profil-input-wrapper">
-              <span>Last Name :</span>
-              <input
-                type="text"
-                placeholder={lastName}
-                onChange={(e) => setNewLastName(e.target.value)}
-                disabled
-              />
-            </div>
-          </form>
-          <div className="btn-form">
-            <button
-              type="submit"
-              className="save-button"
-              onClick={handleEditSave}
-            >
-              Save
-            </button>
-            <button
-              type="button"
-              className="cancel-button"
-              onClick={handleEditCancel}
-            >
-              Cancel
-            </button>
           </div>
-        </div>
+        )}
       </div>
       <h2 className="sr-only">Accounts</h2>
       <Account
