@@ -124,13 +124,15 @@ paths:
         - application/json
       responses:
         "200":
-          description: Login Successfully
+          description: Réponse réussie
           schema:
-            $ref: "#/definitions/LoginResponse"
+            $ref: "#/definitions/transactionInfoResponse"
         "400":
-          description: Invalid Fields
+          description: Champs invalides
+        "401":
+          description: Non autorisé
         "500":
-          description: Internal Server Error
+          description: Erreur interne du serveur
   /user/signup:
     post:
       tags:
@@ -279,8 +281,33 @@ definitions:
             type: string
           note:
             type: string
-
   transactionResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      date:
+        type: string
+        format: date
+      description:
+        type: string
+      amount:
+        type: number
+        format: double
+      balance:
+        type: number
+        format: double
+      details:
+        type: object
+        properties:
+          transaction-type:
+            type: string
+          category:
+            type: string
+          note:
+            type: string
+  transactionInfoResponse:
     type: object
     properties:
       id:
